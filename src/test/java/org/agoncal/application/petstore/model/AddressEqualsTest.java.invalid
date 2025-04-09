@@ -64,10 +64,10 @@ ROOST_METHOD_SIG_HASH=equals_ded257778a
 // ********RoostGPT********
 
 package org.agoncal.application.petstore.model;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import static org.junit.Assert.*;
+import org.junit.experimental.categories.Category;
+import org.mockito.Mockito;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -77,43 +77,56 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
-package org.agoncal.application.petstore.model
+  
 public class AddressEqualsTest {
-    private Address addr1;
-    private Address addr2;
-    private Country country1;
-    private Country country2;
-    @Before
-    public void init() {
-        country1 = new Country("US", "United States", "United States", "USA", "1");
-        country2 = new Country("CA", "Canada", "Canada", "CAN", "2");
-    }
-    @Category(Categories.valid.class)
     @Test
-    public void testEqualsForEqualAddresses() {
-        addr1 = new Address("123 Main St.", "Springfield", "12345", country1);
-        addr2 = new Address("123 Main St.", "Springfield", "12345", country1);
-        assertTrue(addr1.equals(addr2));
-    }
     @Category(Categories.valid.class)
+    public void testEqualsForEqualAddresses() {    
+        String street1 = "123 Test Ave";
+        String city = "Test City";
+        String zipcode = "98765";
+        Country country = Mockito.mock(Country.class);
+      
+        Address address1 = new Address(street1, city, zipcode, country);
+        Address address2 = new Address(street1, city, zipcode, country);
+      
+        assertTrue(address1.equals(address2));
+    }
     @Test
+    @Category(Categories.valid.class)
     public void testEqualsForDifferentAddresses() {
-        addr1 = new Address("123 Main St.", "Springfield", "12345", country1);
-        addr2 = new Address("456 Elm St.", "Ridgefield", "67890", country2);
-        assertFalse(addr1.equals(addr2));
+        String street1 = "123 Test Ave";
+        String city = "Test City";
+        String zipcode = "98765";
+        Country country = Mockito.mock(Country.class);
+      
+        Address address1 = new Address(street1, city, zipcode, country);
+        Address address2 = new Address("456 Other St", city, zipcode, country);
+      
+        assertFalse(address1.equals(address2));
     }
-    @Category(Categories.invalid.class)
     @Test
+    @Category(Categories.valid.class)
     public void testEqualsForNullValue() {
-        addr1 = new Address("123 Main St.", "Springfield", "12345", country1);
-        assertFalse(addr1.equals(null));
+        String street1 = "123 Test Ave";
+        String city = "Test City";
+        String zipcode = "98765";
+        Country country = Mockito.mock(Country.class);
+      
+        Address address1 = new Address(street1, city, zipcode, country);
+      
+        assertFalse(address1.equals(null));
     }
- 
-    @Category(Categories.invalid.class)
     @Test
+    @Category(Categories.valid.class)
     public void testEqualsForNonAddressObject() {
-        addr1 = new Address("123 Main St.", "Springfield", "12345", country1);
-        Object nonAddressObject = new Object();
-        assertFalse(addr1.equals(nonAddressObject));
-    }
-} 
+        String street1 = "123 Test Ave";
+        String city = "Test City";
+        String zipcode = "98765";
+        Country country = Mockito.mock(Country.class);
+      
+        Address address1 = new Address(street1, city, zipcode, country);
+      
+        assertFalse(address1.equals("Not an Address Object"));
+    }    
+}
